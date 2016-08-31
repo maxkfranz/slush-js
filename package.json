@@ -1,0 +1,29 @@
+{
+  "name": "slush-js",
+  "version": "1.0.0",
+  "description": "A Slush generator for clientside and serverside JS projects",
+  "main": "slushfile.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxkfranz/slush-jsproj.git"
+  },
+  "keywords": [
+    "slushgenerator"
+  ],
+  "author": "Max Franz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maxkfranz/slush-jsproj/issues"
+  },
+  "homepage": "https://github.com/maxkfranz/slush-jsproj",
+  "dependencies": {
+    "gulp": "^3.9.0",
+    "gulp-conflict": "^0.2.0",
+    "gulp-install": "^0.2.0",
+    "gulp-mustache": "^0.4.0",
+    "gulp-rename": "^1.2.0",
+    "inquirer": "^0.10.0",
+    "touch": "^1.0.0"
+  }
+}
