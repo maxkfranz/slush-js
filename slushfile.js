@@ -18,11 +18,10 @@ let paths = {
     '.eslintrc.json',
     '.gitignore',
     'gulpfile.js',
-    'nodemon.json',
     'package.json',
     'README.md'
   ],
-  server: ['private/**', 'public/**', 'src/server/**', 'src/views/**'],
+  server: ['private/**', 'public/**', 'src/server/**', 'src/views/**', 'nodemon.json'],
   client: ['src/client/**'],
   clientOnly: ['index.html'],
   mit: ['LICENSE']
@@ -91,6 +90,7 @@ gulp.task('default', function( next ){
       return next();
     }
 
+    answers.common = true;
     answers.client = answers.type.includes('client');
     answers.server = answers.type.includes('server');
 
@@ -103,7 +103,7 @@ gulp.task('default', function( next ){
     answers.serverOnly = answers.server && !answers.client;
 
     let pathsIf = conditionName => answers[ conditionName ] ? paths[ conditionName ] : [];
-    let addPathsForConditionName = ( list, name ) => list.concat( paths[ name ] );
+    let addPathsForConditionName = ( list, name ) => list.concat( answers[ name ] ? paths[ name ] : [] );
     let eachPathsIf = conditionNames => conditionNames.reduce( addPathsForConditionName, [] );
     let relDir = p => path.join( __dirname, 'template', p ); // Note use of __dirname to be relative to generator
 
@@ -118,12 +118,11 @@ gulp.task('default', function( next ){
       .pipe( install() )                     // Run `npm install` if necessary
       .on('finish', function(){
 
-        if( answers.client ){
-          fs.symlinkSync( '../build/app.js', './public/app.js' );
+        if( answers.server ){
+          fs.symlinkSync( '../build/build.js', './public/build.js' );
           fs.symlinkSync( '../build/deps.js', './public/deps.js' );
+          fs.symlinkSync( '../build/build.css', './public/build.css' );
         }
-
-        fs.symlinkSync( '../build/app.css', './public/app.css' );
 
         next();
       })
