@@ -6,7 +6,7 @@
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/maxkfranz/slush-jsproj.git"
+    "url": "https://github.com/maxkfranz/slush-js.git"
   },
   "keywords": [
     "slushgenerator"
@@ -14,9 +14,9 @@
   "author": "Max Franz",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/maxkfranz/slush-jsproj/issues"
+    "url": "https://github.com/maxkfranz/slush-js/issues"
   },
-  "homepage": "https://github.com/maxkfranz/slush-jsproj",
+  "homepage": "https://github.com/maxkfranz/slush-js",
   "dependencies": {
     "gulp": "^3.9.0",
     "gulp-conflict": "^0.2.0",
