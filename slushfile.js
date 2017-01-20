@@ -9,37 +9,101 @@ let fs = require('fs');
 
 let paths = {
   common: [
-    'build/**',
-    'src/styles/**',
-    'src/model/**',
-    'src/util/**',
     'test/**',
+    '.babelrc',
     '.eslintignore',
     '.eslintrc.json',
     '.gitignore',
+    '.npmignore',
+    '.uglify.json',
     'gulpfile.js',
     'package.json',
     'README.md'
   ],
-  server: ['private/**', 'public/**', 'src/server/**', 'src/views/**', 'nodemon.json'],
-  client: ['src/client/**'],
+  buildJs: [
+    'build/bundle.js'
+  ],
+  buildDeps: [
+    'build/deps.js'
+  ],
+  buildCss: [
+    'build/bundle.css',
+    '.cssnext.json',
+    '.cssnano.json',
+    '.stylelintrc.json'
+  ],
+  lib: [
+    'src/index.js',
+    'src/demo.html'
+  ],
+  libAndCss: [
+    'src/styles/index.css'
+  ],
+  server: [
+    'private/**',
+    'public/**',
+    'src/server/**',
+    'src/views/**',
+    'nodemon.json'
+  ],
+  client: [
+    'src/client/**'
+  ],
+  clientOrServer: [
+    'src/styles/**',
+    'src/model/**'
+  ],
   clientOnly: ['index.html'],
   mit: ['LICENSE']
 };
 
-let whenUsingGithub = answers => answers.useGithub;
-let whenServer = answers => answers.type.server;
+let includes = ( arr, val ) => arr == null ? false : arr.includes( val );
+let whenUsingGithub = answers => answers.useGithub === true;
+let whenServer = answers => includes(answers.type, 'server');
+let whenLib = answers => answers.lib === true;
+let whenNotLib = answers => answers.lib === false;
+let whenClient = answers => includes(answers.type, 'client');
 
 gulp.task('default', function( next ){
+  console.log('\nAnswer the following questions to scaffold your JS project.\n');
+
   inquirer.prompt([
+    {
+      type: 'list',
+      name: 'lib',
+      message: 'Is the project a library or an app',
+      choices: [
+        { name: 'App', value: false },
+        { name: 'Library', value: true }
+      ],
+      default: true
+    },
+
+    {
+      type: 'confirm',
+      name: 'css',
+      message: 'Does the lib need to build CSS',
+      default: false,
+      when: whenLib
+    },
+
     {
       type: 'checkbox',
       name: 'type',
-      message: 'Project type',
+      message: 'App type',
       choices: [
         { name: 'Clientside', value: 'client', checked: true },
         { name: 'Serverside', value: 'server', checked: true }
-      ]
+      ],
+      when: whenNotLib
+    },
+
+    {
+      type: 'confirm',
+      name: 'react',
+      message: 'Use React',
+      default: false,
+      when: whenClient
     },
 
     {
@@ -91,16 +155,25 @@ gulp.task('default', function( next ){
     }
 
     answers.common = true;
-    answers.client = answers.type.includes('client');
-    answers.server = answers.type.includes('server');
+    answers.client = includes(answers.type, 'client');
+    answers.server = includes(answers.type, 'server');
 
-    if( !answers.server && !answers.client ){
-      console.log('Can not build project without both clientside and serverside; aborting...');
+    if( !answers.lib && !answers.server && !answers.client ){
+      console.log('Can not build project without both clientside and serverside in app; aborting...');
       return next();
     }
 
     answers.clientOnly = answers.client && !answers.server;
     answers.serverOnly = answers.server && !answers.client;
+    answers.clientAndServer = answers.client && answers.server;
+    answers.clientOrServer = answers.client || answers.server;
+    answers.buildJs = answers.client || answers.lib;
+    answers.dontBuildJs = !answers.buildJs;
+    answers.buildDeps = answers.client;
+    answers.dontBuildDeps = !answers.buildDeps;
+    answers.buildCss = answers.clientOrServer || answers.css;
+    answers.dontBuildCss = !answers.buildCss;
+    answers.libAndCss = answers.buildCss && answers.lib;
 
     let pathsIf = conditionName => answers[ conditionName ] ? paths[ conditionName ] : [];
     let addPathsForConditionName = ( list, name ) => list.concat( answers[ name ] ? paths[ name ] : [] );
@@ -119,10 +192,26 @@ gulp.task('default', function( next ){
       .on('finish', function(){
 
         if( answers.server ){
-          fs.symlinkSync( '../build/build.js', './public/build.js' );
-          fs.symlinkSync( '../build/deps.js', './public/deps.js' );
-          fs.symlinkSync( '../build/build.css', './public/build.css' );
+          try {
+            fs.symlinkSync( '../build/bundle.css', './public/bundle.css' );
+            fs.symlinkSync( '../build/bundle.js', './public/bundle.js' );
+            fs.symlinkSync( '../build/deps.js', './public/deps.js' );
+          } catch( err ){} // try/catch for convenience in testing onverwrites
         }
+
+        var pkg = JSON.parse( fs.readFileSync('./package.json') );
+
+        // nop is a dummy package so templating works; so just remove it from package.json
+
+        delete pkg.dependencies.nop;
+
+        if( pkg.bundledDependencies ){
+          pkg.bundledDependencies = pkg.bundledDependencies.filter(function( dep ){
+            return dep != 'nop';
+          });
+        }
+
+        fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2))
 
         next();
       })

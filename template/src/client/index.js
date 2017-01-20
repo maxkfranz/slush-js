@@ -7,3 +7,17 @@ if( debug.enabled ){
 }
 
 // TODO client
+{{#react}}
+// react example
+
+let React = require('react');
+let ReactDOM = require('react-dom');
+
+let div = document.createElement('div');
+document.body.appendChild( div );
+
+ReactDOM.render(
+  <h1>Hello, world!</h1>,
+  div
+);
+{{/react}}

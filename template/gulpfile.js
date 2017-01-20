@@ -14,12 +14,26 @@ var notifier = require('node-notifier');
 var $ = require('gulp-load-plugins')();
 var runSequence = require('run-sequence');
 var pkg = require('./package.json');
-var config = require('./src/server/config');
 var path = require('path');
+var through = require('through');
+var streamNop = through;
+var fs = require('fs');
+var nopTarget = function( next ){ next(); }
+
+process.on('SIGINT', function() {
+  setTimeout(function() {
+    $.util.log($.util.colors.red('Successfully closed gulp process ' + process.pid));
+    process.exit(1);
+  }, 500);
+});
 
 {{#clientOnly}}
-var deps = Object.keys( pkg.dependencies );
+var deps = Object.keys( pkg.dependencies ).concat('babel-polyfill');
 {{/clientOnly}}
+
+{{#lib}}
+var deps = Object.keys( pkg.dependencies ).concat('babel-polyfill');
+{{/lib}}
 
 {{#server}}
 var deps = pkg.bundledDependencies || [];
@@ -49,7 +63,7 @@ var getBrowserified = function( opts ){
     packageCache: {},
     fullPaths: true,
     bundleExternal: true,
-    entries: [ './src/client' ]
+    entries: [ {{#lib}}'./src'{{/lib}}{{#clientOrServer}}'./src/client'{{/clientOrServer}} ]
   }, opts );
 
   return browserify( opts ).on( 'log', $.util.log );
@@ -57,11 +71,7 @@ var getBrowserified = function( opts ){
 
 var transform = function( b ){
   return ( b
-    .transform( babelify.configure({
-      presets: ['es2015'],
-      ignore: 'node_modules/**/*',
-      sourceMaps: 'inline'
-    }) )
+    .transform( babelify.configure( JSON.parse( fs.readFileSync('./.babelrc') ) ) )
     .external( deps )
   ) ;
 };
@@ -70,19 +80,35 @@ var bundle = function( b ){
   return ( b
     .bundle()
     .on( 'error', handleErr )
-    .pipe( source('app.js') )
+    .pipe( source('bundle.js') )
     .pipe( buffer() )
   ) ;
 };
 
-{{#client}}
-gulp.task('js', function(){
-  return bundle( transform( getBrowserified() ) )
+var setBuildEnv = function( opts ){
+  if( !opts.debug ){
+    process.env['NODE_ENV'] = 'production';
+  }
+};
+
+var buildJs = function( opts ){
+  opts = objectAssign( { debug: true }, opts );
+
+  setBuildEnv( opts );
+
+  return bundle( transform( getBrowserified( opts ) ) )
+    .pipe( opts.debug ? streamNop() : $.uglify( require('./.uglify.json') ) )
     .pipe( gulp.dest('./build') )
   ;
-});
+};
 
-gulp.task('js-deps', function(){
+var buildJsDeps = function( opts ){
+  opts = objectAssign( {
+    debug: true
+  }, opts );
+
+  setBuildEnv( opts );
+
   var b = browserify({
     debug: false
   });
@@ -96,44 +122,81 @@ gulp.task('js-deps', function(){
     .on( 'error', handleErr )
     .pipe( source('deps.js') )
     .pipe( buffer() )
+    .pipe( opts.debug ? streamNop() : $.uglify( require('./.uglify.json') ) )
     .pipe( gulp.dest('./build') )
   ) ;
-});
+};
 
-var less = function( s ){
+var buildCss = function( opts ){
+  opts = objectAssign( {
+    debug: true
+  }, opts );
+
+  var s = gulp.src( './src/styles/index.css' );
+
+  if( opts.debug ){
+    s = s.pipe( $.sourcemaps.init() );
+  }
+
+  s = ( s
+    .pipe(
+      $.postcss(
+        [
+          require('postcss-import')(),
+          require('postcss-cssnext')( require('./.cssnext.json') )
+        ].concat(
+          opts.debug ? [] : [ require('cssnano')( require('./.cssnano.json') ) ]
+        )
+      )
+    )
+
+    .on( 'error', handleErr )
+  );
+
+  if( opts.debug ){
+    s = s.pipe( $.sourcemaps.write() );
+  }
+
   return ( s
-    .pipe( $.sourcemaps.init() )
-
-    .pipe( $.less({
-      paths: ['./src/styles'],
-      sourceMap: true,
-      relativeUrls: true,
-      sourceMapRootpath: '../',
-      sourceMapBasepath: process.cwd()
-    }) )
-      .on( 'error', handleErr )
-
-    .pipe( $.sourcemaps.write() )
-    .pipe( $.rename('app.css') )
+    .pipe( $.rename('bundle.css') )
     .pipe( gulp.dest('./build') )
   );
 };
 
-gulp.task('css', function(){
-  return less( gulp.src('./src/styles/index.less') );
-});
-{{/client}}
+{{#buildJs}}
+gulp.task('js', function(){ return buildJs(); });
+gulp.task('js-prod', function(){ return buildJs({ debug: false }); });
+{{/buildJs}}
 
-{{#serverOnly}}
-var nopTarget = function( next ){ next(); }
-
+{{#dontBuildJs}}
 gulp.task('js', nopTarget);
+gulp.task('js-prod', nopTarget);
+{{/dontBuildJs}}
+
+{{#buildDeps}}
+gulp.task('js-deps', function(){ return buildJsDeps(); });
+gulp.task('js-deps-prod', function(){ return buildJsDeps({ debug: false }); });
+{{/buildDeps}}
+
+{{#dontBuildDeps}}
 gulp.task('js-deps', nopTarget);
+gulp.task('js-deps-prod', nopTarget);
+{{/dontBuildDeps}}
+
+{{#buildCss}}
+gulp.task('css', function(){ return buildCss(); });
+gulp.task('css-prod', function(){ return buildCss({ debug: false }); });
+{{/buildCss}}
+
+{{#dontBuildCss}}
 gulp.task('css', nopTarget);
-{{/serverOnly}}
+gulp.task('css-prod', nopTarget);
+{{/dontBuildCss}}
 
 gulp.task('watch', ['css', 'js-deps'], function(){
   {{#server}}
+  var config = require('./src/server/config');
+
   nodemon('--debug -e "js json" ./src/server');
 
   nodemon.on('restart', function(files){
@@ -149,32 +212,26 @@ gulp.task('watch', ['css', 'js-deps'], function(){
   $.util.log( $.util.colors.green('App hosted on local server at http://localhost:' + config.PORT) );
   {{/server}}
 
-  {{#client}}
+  {{#buildJs}}
   $.livereload.listen({
     basePath: process.cwd()
   });
 
-  gulp.watch( ['./src/views/index.html', './build/deps.js', './build/app.js', './build/app.css'] )
+  gulp.watch( ['./src/views/index.html', './src/demo.html', './build/deps.js', './build/bundle.js', './build/bundle.css'] )
     .on('change', $.livereload.changed)
   ;
 
-  gulp.src( './src/styles/index.less' )
-    .pipe( $.plumber() )
-    .pipe( $.watchLess('./src/styles/index.less', function(){
-      runSequence('css');
-    }) )
-    .on( 'error', handleErr )
-  ;
+  gulp.watch( ['./src/styles/**/*'], ['css'] );
 
   gulp.watch( ['./package.json'], ['js-deps'] );
 
   var update = function(){
-    $.util.log( $.util.colors.white('Client JS rebuilding via watch...') );
+    $.util.log( $.util.colors.white('JS rebuilding via watch...') );
 
     bundle( b )
       .pipe( gulp.dest('./build') )
       .on('finish', function(){
-        $.util.log( $.util.colors.green('Client JS rebuild finished via watch') );
+        $.util.log( $.util.colors.green('JS rebuild finished via watch') );
       })
     ;
   };
@@ -188,21 +245,17 @@ gulp.task('watch', ['css', 'js-deps'], function(){
   b.on( 'update', update );
 
   update();
-  {{/client}}
+  {{/buildJs}}
 });
 
 gulp.task('default', ['watch'], emptyTask);
 
 gulp.task('build', ['js', 'js-deps', 'css'], emptyTask);
 
+gulp.task('build-prod', ['js-prod', 'js-deps-prod', 'css-prod'], emptyTask);
+
 gulp.task('clean', function(){
   return gulp.src('./build')
     .pipe( clean() )
-  ;
-});
-
-gulp.task('test', function(){
-  return gulp.src('test/*.js')
-    .pipe( $.mocha() )
   ;
 });

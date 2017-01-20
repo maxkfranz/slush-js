@@ -1,0 +1,6 @@
+{{#clientOrServer}}
+@import "normalize.css";
+@import "./vendor/skeleton.css";
+{{/clientOrServer}}
+
+/* css entry point */
