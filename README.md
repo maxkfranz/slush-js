@@ -20,7 +20,7 @@ The stack is also very modular, thanks to Gulp and Browserify.  So you can easil
     - [Browserify](http://browserify.org/) for bundling with [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) `require()` support
     - [Babel](https://babeljs.io/) for transpiling and polyfilling ES2015 (you can update `.babelrc` to use a newer ES20XX if you like)
     - [Livereload](https://www.npmjs.com/package/gulp-livereload) to bring live reloading functionality for clientside/bundled code when developing
-    - [UglifyJS](https://github.com/mishoo/UglifyJS) to compress built JS
+    - [UglifyJS](http://lisperator.net/uglifyjs/) to compress built JS
     - [React](https://facebook.github.io/react/) (optional)
   - CSS
     - [PostCSS](http://postcss.org/) to add features to CSS
