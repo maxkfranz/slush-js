@@ -58,10 +58,10 @@ var handleErr = function( err ){
 
 var getBrowserified = function( opts ){
   opts = objectAssign({
-    debug: true,
+    debug: opts.debug,
     cache: {},
     packageCache: {},
-    fullPaths: true,
+    fullPaths: opts.debug,
     bundleExternal: true,
     entries: [ {{#lib}}'./src'{{/lib}}{{#clientOrServer}}'./src/client'{{/clientOrServer}} ]
   }, opts );
