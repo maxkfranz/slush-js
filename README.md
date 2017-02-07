@@ -36,6 +36,13 @@ The stack is also very modular, thanks to Gulp and Browserify.  So you can easil
   - [Nodemon](https://www.npmjs.com/package/nodemon) to bring live reloading functionality for serverside code when developing
 
 
+## Notes
+
+- Don't use ES2015 `import` if you want to share code between the server and the client.  You can't use `import` in Node.js.
+- Debug Mocha tests or server code with `node --inspect --debug-brk` or `mocha --inspect --debug-brk`
+  - `--inspect` to start the debugger UI
+  - `--debug-brk` to break on the first line so you have time to open the debugger
+
 ## Instructions
 
 1. Install `slush` : `npm install -g slush`
