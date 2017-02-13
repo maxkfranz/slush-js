@@ -11,7 +11,13 @@
   },
   "homepage": "https://github.com/{{{githubProj}}}",
   {{/useGithub}}
+  {{#lib}}
+  "main": "./build/bundle.js",
+  {{/lib}}
   "scripts": {
+    {{#lib}}
+    "prepublish": "gulp build",
+    {{/lib}}
     {{#server}}
     "start": "gulp build && forever start ./src/server",
     "stop": "forever stop ./src/server",
