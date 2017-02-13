@@ -57,6 +57,8 @@ var handleErr = function( err ){
 };
 
 var getBrowserified = function( opts ){
+  opts = opts || {};
+
   opts = objectAssign({
     debug: opts.debug,
     cache: {},

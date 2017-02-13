@@ -50,6 +50,8 @@ let paths = {
     'src/client/**'
   ],
   clientOrServer: [
+    'Dockerfile',
+    '.dockerignore',
     'src/styles/**',
     'src/model/**'
   ],

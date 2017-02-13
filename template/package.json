@@ -1,5 +1,6 @@
 {
   "name": "{{name}}",
+  "version": "0.0.0",
   "description": "{{description}}",
   {{#useGithub}}
   "repository": {
@@ -19,13 +20,16 @@
     "prepublish": "gulp build",
     {{/lib}}
     {{#server}}
-    "start": "gulp build && forever start ./src/server",
+    "start": "forever ./src/server",
     "stop": "forever stop ./src/server",
     {{/server}}
     {{#clientOnly}}
-    "start": "gulp build",
+    "start": "http-server -p 3000",
     "stop": "echo Nothing to stop",
     {{/clientOnly}}
+    {{#clientOrServer}}
+    "postinstall": "npm run build-prod",
+    {{/clientOrServer}}
     "test": "mocha",
     "build": "gulp build",
     "build-prod": "gulp build-prod",
@@ -68,6 +72,9 @@
     {{#clientOrServer}}
     "normalize.css": "^5.0.0",
     {{/clientOrServer}}
+    {{#clientOnly}}
+    "http-server": "0.9.0",
+    {{/clientOnly}}
     {{#buildCss}}
     "cssnano": "^3.10.0",
     "postcss-cssnext": "^2.9.0",
