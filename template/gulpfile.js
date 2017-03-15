@@ -63,7 +63,8 @@ var getBrowserified = function( opts ){
     debug: opts.debug,
     cache: {},
     packageCache: {},
-    bundleExternal: true,
+    bundleExternal: true,{{#lib}}
+    standalone: true,{{/lib}}
     entries: [ {{#lib}}'./src'{{/lib}}{{#clientOrServer}}'./src/client'{{/clientOrServer}} ]
   }, opts );
 
