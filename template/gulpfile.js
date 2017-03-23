@@ -3,6 +3,7 @@ var objectAssign = require('object-assign');
 var gulp = require('gulp');
 var browserify = require('browserify');
 var babelify = require('babelify');
+var envify = require('envify');
 var watchify = require('watchify');
 var nodemon = require('nodemon');
 var del = require('del');
@@ -74,6 +75,7 @@ var getBrowserified = function( opts ){
 var transform = function( b ){
   return ( b
     .transform( babelify.configure( JSON.parse( fs.readFileSync('./.babelrc') ) ) )
+    .transform( envify )
     .external( deps )
   ) ;
 };
@@ -88,9 +90,7 @@ var bundle = function( b ){
 };
 
 var setBuildEnv = function( opts ){
-  if( !opts.debug ){
-    process.env['NODE_ENV'] = 'production';
-  }
+  process.env['NODE_ENV'] = opts.debug ? 'development' : 'production';
 };
 
 var buildJs = function( opts ){
@@ -197,6 +197,8 @@ gulp.task('css-prod', nopTarget);
 {{/dontBuildCss}}
 
 gulp.task('watch', ['css', 'js-deps'], function(){
+  setBuildEnv({ debug: true });
+
   {{#server}}
   var config = require('./src/server/config');
 
@@ -239,7 +241,7 @@ gulp.task('watch', ['css', 'js-deps'], function(){
     ;
   };
 
-  var b = getBrowserified();
+  var b = getBrowserified({ debug: true });
 
   transform( b );
 
