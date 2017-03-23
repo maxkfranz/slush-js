@@ -4,9 +4,7 @@ var path = require('path');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index.ejs', {
-    development: req.app.get('env') === 'development'
-  });
+  res.render('index.html');
 });
 
 module.exports = router;
