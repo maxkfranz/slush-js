@@ -1,13 +1,14 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
+var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var debug = require('debug')('{{name}}:server');
 var http = require('http');
 var config = require('./config');
 var path = require('path');
+let logger = require('./logger');
 
 var app = express();
 var server = http.createServer(app);
@@ -17,7 +18,15 @@ app.set('views', path.join(__dirname, '../', 'views'));
 app.set('view engine', 'ejs');
 
 app.use(favicon(path.join(__dirname, '../..', 'public', 'icon.png')));
-app.use(logger('dev'));
+app.use(morgan('dev', {
+  stream: new stream.Writable({
+    write( chunk, encoding, next ){
+      logger.info( chunk.toString('utf8').trim() );
+
+      next();
+    }
+  })
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -93,11 +102,11 @@ function onError(error) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+      logger.error(bind + ' requires elevated privileges');
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+      logger.error(bind + ' is already in use');
       process.exit(1);
       break;
     default:
