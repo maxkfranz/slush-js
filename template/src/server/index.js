@@ -1,17 +1,17 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var morgan = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var debug = require('debug')('{{name}}:server');
-var http = require('http');
-var config = require('./config');
-var path = require('path');
+let express = require('express');
+let path = require('path');
+let favicon = require('serve-favicon');
+let morgan = require('morgan');
+let cookieParser = require('cookie-parser');
+let bodyParser = require('body-parser');
+let debug = require('debug')('{{name}}:server');
+let http = require('http');
+let config = require('./config');
+let path = require('path');
 let logger = require('./logger');
 
-var app = express();
-var server = http.createServer(app);
+let app = express();
+let server = http.createServer(app);
 
 // view engine setup
 app.set('views', path.join(__dirname, '../', 'views'));
@@ -46,7 +46,7 @@ app.use( '/', require('./routes/index') );
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  let err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
@@ -69,7 +69,7 @@ app.use(function(err, req, res, next) {
 });
 
 
-var port = normalizePort(config.PORT);
+let port = normalizePort(config.PORT);
 
 app.set('port', port);
 
@@ -78,7 +78,7 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+  let port = parseInt(val, 10);
 
   if (isNaN(port)) {
     // named pipe
@@ -98,7 +98,7 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
+  let bind = typeof port === 'string'
     ? 'Pipe ' + port
     : 'Port ' + port;
 
@@ -118,8 +118,8 @@ function onError(error) {
 }
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
+  let addr = server.address();
+  let bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
