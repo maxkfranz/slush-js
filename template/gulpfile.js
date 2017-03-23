@@ -145,6 +145,7 @@ var buildCss = function( opts ){
       $.postcss(
         [
           require('postcss-import')(),
+          require('postcss-url')({ url: 'inline', maxSize: Number.MAX_SAFE_INTEGER }),
           require('postcss-cssnext')( require('./.cssnext.json') )
         ].concat(
           opts.debug ? [] : [ require('cssnano')( require('./.cssnano.json') ) ]
