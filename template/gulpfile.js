@@ -22,10 +22,8 @@ var fs = require('fs');
 var nopTarget = function( next ){ next(); }
 
 process.on('SIGINT', function() {
-  setTimeout(function() {
-    $.util.log($.util.colors.red('Successfully closed gulp process ' + process.pid));
-    process.exit(1);
-  }, 500);
+  $.util.log($.util.colors.red('Successfully closed gulp process ' + process.pid));
+  process.exit(1);
 });
 
 {{#clientOnly}}
