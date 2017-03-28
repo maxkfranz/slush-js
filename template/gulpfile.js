@@ -64,7 +64,7 @@ var getBrowserified = function( opts ){
     packageCache: {},
     bundleExternal: true,{{#lib}}
     standalone: true,{{/lib}}
-    entries: [ {{#lib}}'./src'{{/lib}}{{#clientOrServer}}'./src/client'{{/clientOrServer}} ]
+    entries: [ {{#lib}}'src'{{/lib}}{{#clientOrServer}}'src/client'{{/clientOrServer}} ]
   }, opts );
 
   return browserify( opts ).on( 'log', $.util.log );
@@ -72,7 +72,7 @@ var getBrowserified = function( opts ){
 
 var transform = function( b ){
   return ( b
-    .transform( babelify.configure( JSON.parse( fs.readFileSync('./.babelrc') ) ) )
+    .transform( babelify.configure( JSON.parse( fs.readFileSync('.babelrc') ) ) )
     .transform( envify )
     .external( deps )
   ) ;
@@ -98,7 +98,7 @@ var buildJs = function( opts ){
 
   return bundle( transform( getBrowserified( opts ) ) )
     .pipe( opts.debug ? streamNop() : $.uglify( require('./.uglify.json') ) )
-    .pipe( gulp.dest('./build') )
+    .pipe( gulp.dest('build') )
   ;
 };
 
@@ -123,7 +123,7 @@ var buildJsDeps = function( opts ){
     .pipe( source('deps.js') )
     .pipe( buffer() )
     .pipe( opts.debug ? streamNop() : $.uglify( require('./.uglify.json') ) )
-    .pipe( gulp.dest('./build') )
+    .pipe( gulp.dest('build') )
   ) ;
 };
 
@@ -132,7 +132,7 @@ var buildCss = function( opts ){
     debug: true
   }, opts );
 
-  var s = gulp.src( './src/styles/index.css' );
+  var s = gulp.src( 'src/styles/index.css' );
 
   if( opts.debug ){
     s = s.pipe( $.sourcemaps.init() );
@@ -160,7 +160,7 @@ var buildCss = function( opts ){
 
   return ( s
     .pipe( $.rename('bundle.css') )
-    .pipe( gulp.dest('./build') )
+    .pipe( gulp.dest('build') )
   );
 };
 
@@ -200,7 +200,7 @@ gulp.task('watch', ['css', 'js-deps'], function(){
   {{#server}}
   var config = require('./src/server/config');
 
-  nodemon('--debug -e "js json" ./src/server');
+  nodemon('--debug -e "js json" src/server');
 
   nodemon.on('restart', function(files){
     $.util.log( $.util.colors.green('Server restarted via watch') );
@@ -220,19 +220,19 @@ gulp.task('watch', ['css', 'js-deps'], function(){
     basePath: process.cwd()
   });
 
-  gulp.watch( ['./src/views/**', './src/demo.html', './build/deps.js', './build/bundle.js', './build/bundle.css'] )
+  gulp.watch( ['src/views/**', 'src/demo.html', 'build/deps.js', 'build/bundle.js', 'build/bundle.css'] )
     .on('change', $.livereload.changed)
   ;
 
-  gulp.watch( ['./src/styles/**/*'], ['css'] );
+  gulp.watch( ['src/styles/**/*'], ['css'] );
 
-  gulp.watch( ['./package.json'], ['js-deps'] );
+  gulp.watch( ['package.json'], ['js-deps'] );
 
   var update = function(){
     $.util.log( $.util.colors.white('JS rebuilding via watch...') );
 
     bundle( b )
-      .pipe( gulp.dest('./build') )
+      .pipe( gulp.dest('build') )
       .on('finish', function(){
         $.util.log( $.util.colors.green('JS rebuild finished via watch') );
       })
@@ -258,7 +258,7 @@ gulp.task('build', ['js', 'js-deps', 'css'], emptyTask);
 gulp.task('build-prod', ['js-prod', 'js-deps-prod', 'css-prod'], emptyTask);
 
 gulp.task('clean', function(){
-  return gulp.src('./build')
+  return gulp.src('build')
     .pipe( clean() )
   ;
 });
