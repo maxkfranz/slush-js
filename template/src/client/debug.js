@@ -1,5 +1,5 @@
 let domReady = require('fready');
-let livereload = require('./livereload');
+let sync = require('./sync');
 
 let debug = window.dbg = {
   enabled: function( on ){
@@ -15,7 +15,7 @@ let debug = window.dbg = {
   },
 
   init: function(){
-    domReady( livereload );
+    domReady( sync );
   }
 };
 

@@ -1,17 +1,18 @@
-let express = require('express');
-let path = require('path');
-let favicon = require('serve-favicon');
-let morgan = require('morgan');
-let cookieParser = require('cookie-parser');
-let bodyParser = require('body-parser');
-let debug = require('debug')('{{name}}:server');
-let http = require('http');
-let config = require('./config');
-let path = require('path');
-let logger = require('./logger');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const debug = require('debug')('{{name}}:server');
+const http = require('http');
+const config = require('./config');
+const logger = require('./logger');
+const stream = require('stream');
+const fs = require('fs');
 
-let app = express();
-let server = http.createServer(app);
+const app = express();
+const server = http.createServer(app);
 
 // view engine setup
 app.set('views', path.join(__dirname, '../', 'views'));
@@ -22,7 +23,7 @@ app.engine('html', function (filePath, options, callback){
     if( err ){ return callback( err ); }
 
     return callback( null, content.toString() );
-  })
+  });
 });
 
 app.set('view engine', 'html');

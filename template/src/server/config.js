@@ -1,5 +1,5 @@
-let process = require('process');
-let _ = require('lodash');
+const process = require('process');
+const _ = require('lodash');
 
 let defaults = {
   PORT: 3000

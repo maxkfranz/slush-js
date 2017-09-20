@@ -1,19 +1,6 @@
 /* css entry point */
 
-{{#clientOrServer}}
-@import "normalize.css";
-
-/* fonts */
-@import "./vendor/open-sans.css";
-@import "./vendor/inconsolata.css";
-@import "./vendor/font-awesome.css";
-/*@import "./vendor/font-awesome-form.css";*/
-@import "./vendor/font-awesome-custom.css";
-@import "./vendor/material-icons.css";
-@import "./vendor/material-form.css";
-
 /* app styles */
+@import "./vars.css";
 @import "./animations.css";
 @import "./base.css";
-
-{{/clientOrServer}}

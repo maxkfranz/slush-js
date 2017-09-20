@@ -7,8 +7,8 @@
 @font-face {
     font-family: 'Inconsolata';
     src:
-      /*url('./fonts/inconsolata/inconsolata.woff2') format('woff2'),*/
-      url('./fonts/inconsolata/inconsolata.woff') format('woff')
+      /*url('./inconsolata/inconsolata.woff2') format('woff2'),*/
+      url('./inconsolata/inconsolata.woff') format('woff')
     ;
     font-weight: normal;
     font-style: normal;

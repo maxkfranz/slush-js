@@ -19,14 +19,14 @@ The following environment variables can be used to configure the server:
 
 ## Run targets
 
-{{#server}}
+{{#clientOrServer}}
 - `npm start` : start the server
 - `npm stop` : stop the server
-{{/server}}
+{{/clientOrServer}}
 - `npm run build` : build project
 - `npm run build-prod` : build the project for production
 - `npm run clean` : clean the project
-- `npm run watch` : watch mode (debug mode enabled, auto rebuild, livereload)
+- `npm run watch` : watch mode (debug mode enabled, autorebuild, autoreload)
 - `npm test` : run tests
 - `npm run lint` : lint the project
 
@@ -59,32 +59,6 @@ Notes:
   - [Docker CLI docs](https://docs.docker.com/engine/reference/commandline/cli/)
 {{/clientOrServer}}
 
-
-{{#clientAndServer}}
-## Adding npm dependencies
-
-Serverside only:
-
-```
-npm install --save pkg-name
-
-#or
-npm i -S pkg-name
-```
-
-Clientside (or both clientside and serverside):
-
-```
-npm install --save --save-bundled pkg-name
-
-# or
-npm i -SB pkg-name
-```
-
-N.B.: Only modules that specify `--save-bundled` can be `require()`d on the clientside.  In order to keep debug watch fast, it's necessary to maintain the client dependencies in `bundledDependencies` in `package.json`.  This also allows for shipping updates to the app without busting the cache for the dependencies on clients.
-
-(Using the `bundledDependencies` field in `package.json` in this way isn't strictly how it's intended to be used, but it should be fine since `{{name}}` will never be published to npm and no one would `require('{{name}}')`.  (Mis)using `bundledDependencies` in this way lets us just use `npm` commands without editing `package.json` manually, while keeping common dependencies on the same version on the client and the server.)
-{{/clientAndServer}}
 
 
 ## Testing

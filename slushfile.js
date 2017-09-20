@@ -6,6 +6,7 @@ let mustache = require('gulp-mustache');
 let rename = require('gulp-rename');
 let path = require('path');
 let fs = require('fs');
+let gulpif = require('gulp-if');
 
 let paths = {
   common: [
@@ -15,45 +16,47 @@ let paths = {
     '.eslintrc.json',
     '.gitignore',
     '.npmignore',
-    '.uglify.json',
-    'gulpfile.js',
+    '.travis.yml',
     'package.json',
     'README.md'
   ],
   buildJs: [
-    'build/bundle.js'
+    'build/bundle.js',
+    'webpack.config.js',
+    'browser-sync.config.js'
   ],
   buildDeps: [
-    'build/deps.js'
+    'build/deps.js',
+    'build/deps.css'
   ],
   buildCss: [
     'build/bundle.css',
-    '.cssnext.json',
-    '.cssnano.json',
-    '.stylelintrc.json'
+    '.stylelintrc.json',
+    'postcss.config.js'
   ],
   lib: [
     'src/index.js',
-    'src/demo.html'
+    'demo.html'
   ],
   libAndCss: [
     'src/styles/index.css'
   ],
+  clientAndCss: [
+    'src/styles/**/*'
+  ],
   server: [
-    'private/**',
-    'public/**',
-    'src/server/**',
-    'src/views/**',
-    'nodemon.json'
+    'nodemon.json',
+    'private/**/*',
+    'public/**/*',
+    'src/server/**/*',
+    'src/views/**/*',
   ],
   client: [
     'src/client/**'
   ],
   clientOrServer: [
     'Dockerfile',
-    '.dockerignore',
-    'src/styles/**',
-    'src/model/**'
+    '.dockerignore'
   ],
   clientOnly: ['index.html'],
   mit: ['LICENSE']
@@ -169,25 +172,28 @@ gulp.task('default', function( next ){
     answers.serverOnly = answers.server && !answers.client;
     answers.clientAndServer = answers.client && answers.server;
     answers.clientOrServer = answers.client || answers.server;
+    answers.notServer = !answers.server;
     answers.buildJs = answers.client || answers.lib;
     answers.dontBuildJs = !answers.buildJs;
     answers.buildDeps = answers.client;
     answers.dontBuildDeps = !answers.buildDeps;
-    answers.buildCss = answers.clientOrServer || answers.css;
+    answers.buildCss = answers.client || answers.css;
     answers.dontBuildCss = !answers.buildCss;
     answers.libAndCss = answers.buildCss && answers.lib;
+    answers.clientAndCss = answers.buildCss && answers.client;
 
     let pathsIf = conditionName => answers[ conditionName ] ? paths[ conditionName ] : [];
     let addPathsForConditionName = ( list, name ) => list.concat( answers[ name ] ? paths[ name ] : [] );
     let eachPathsIf = conditionNames => conditionNames.reduce( addPathsForConditionName, [] );
     let relDir = p => path.join( __dirname, 'template', p ); // Note use of __dirname to be relative to generator
+    let isMustachable = file => !file.path.match('template/src/styles/.*/');
 
     gulp.src(
       eachPathsIf( Object.keys( paths ) ).map( relDir ),
 
       { base: path.join( __dirname, 'template' ) }
     )
-      .pipe( mustache(answers) )             // Mustache template support
+      .pipe( gulpif( isMustachable, mustache(answers) ) ) // Mustache template support
       .pipe( conflict('./') )                // Confirms overwrites on file conflicts
       .pipe( gulp.dest('./') )               // Without __dirname here = relative to cwd
       .pipe( install() )                     // Run `npm install` if necessary
@@ -195,23 +201,22 @@ gulp.task('default', function( next ){
 
         if( answers.server ){
           try {
-            fs.symlinkSync( '../build/bundle.css', './public/bundle.css' );
-            fs.symlinkSync( '../build/bundle.js', './public/bundle.js' );
-            fs.symlinkSync( '../build/deps.js', './public/deps.js' );
+            if( answers.buildJs ){
+              fs.symlinkSync( '../build/bundle.js', './public/bundle.js' );
+              fs.symlinkSync( '../build/deps.js', './public/deps.js' );
+            }
+            if( answers.buildCss ){
+              fs.symlinkSync( '../build/bundle.css', './public/bundle.css' );
+              fs.symlinkSync( '../build/deps.css', './public/deps.css' );
+            }
           } catch( err ){} // try/catch for convenience in testing onverwrites
         }
 
         var pkg = JSON.parse( fs.readFileSync('./package.json') );
 
-        // nop is a dummy package so templating works; so just remove it from package.json
+        // TO_DEL is a dummy package so templating works; so just remove it from package.json
 
-        delete pkg.dependencies.nop;
-
-        if( pkg.bundledDependencies ){
-          pkg.bundledDependencies = pkg.bundledDependencies.filter(function( dep ){
-            return dep != 'nop';
-          });
-        }
+        delete pkg.dependencies.TO_DELETE;
 
         fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2))
 
