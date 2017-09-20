@@ -19,8 +19,9 @@ The stack uses npm scripts to drive the build targets using the CLI of several p
   - JS
     - [Webpack](https://webpack.js.org/) for bundling with [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) `require()` support and ES `import` support
     - [Babel](https://babeljs.io/) for transpiling and polyfilling ES6+
-    - [Browsersync](https://www.browsersync.io/) to bring live reloading functionality for clientside/bundled code when developing
-      - Using the multibrowser event sync feature requires editing the [`browser-sync.config.js`](https://www.browsersync.io/docs/options) file
+    - [Browsersync](https://www.browsersync.io/)
+      - Support for live reloading the UI when the code is changed
+      - Support for testing on multiple browsers or multiple devices simultaneously (config UI at [http://localhost:3001](http://localhost:3001) when running `npm run watch`)
     - [UglifyJS](http://lisperator.net/uglifyjs/) to compress built JS
     - [React](https://facebook.github.io/react/) (optional)
   - CSS
