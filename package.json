@@ -1,6 +1,6 @@
 {
   "name": "slush-js",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "description": "A Slush generator for clientside and serverside JS projects",
   "main": "slushfile.js",
   "scripts": {},
