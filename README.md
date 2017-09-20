@@ -21,7 +21,7 @@ The stack uses npm scripts to drive the build targets using the CLI of several p
     - [Babel](https://babeljs.io/) for transpiling and polyfilling ES6+
     - [Browsersync](https://www.browsersync.io/)
       - Support for live reloading the UI when the code is changed
-      - Support for testing on multiple browsers or multiple devices simultaneously (config UI at [http://localhost:3001](http://localhost:3002) when running `npm run watch`)
+      - Support for testing on multiple browsers or multiple devices simultaneously (config UI at [http://localhost:3002](http://localhost:3002) when running `npm run watch`)
     - [UglifyJS](http://lisperator.net/uglifyjs/) to compress built JS
     - [React](https://facebook.github.io/react/) (optional)
   - CSS
