@@ -25,6 +25,7 @@ The following environment variables can be used to configure the server:
 {{/clientOrServer}}
 - `npm run build` : build project
 - `npm run build-prod` : build the project for production
+- `npm run bundle-profile` : visualise the bundle dependencies
 - `npm run clean` : clean the project
 - `npm run watch` : watch mode (debug mode enabled, autorebuild, autoreload)
 - `npm test` : run tests
