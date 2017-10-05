@@ -24,7 +24,7 @@
     {{/lib}}
 
     {{#buildJs}}
-    "postinstall": "run-s build-prod",
+    "postinstall": "run-s build",
     {{/buildJs}}
 
     {{#server}}
