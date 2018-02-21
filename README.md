@@ -40,7 +40,7 @@ The stack uses npm scripts to drive the build targets using the CLI of several p
 
 ## Notes
 
-- Don't use ES2015 `import` if you want to share code between the server and the client.  You can't use `import` in Node.js.  Node 8 support `import`.  Once Node 8 and npm 5 are stable, it makes sense to use `import`.
+- Don't use ES2015 `import` if you want to share code between the server and the client.  You can't use `import` in Node.js.  Once there is an LTS release of Node that supports `import`, it will make sense to use it.
 - Debug Mocha tests or server code with `node --inspect --debug-brk` or `mocha --inspect --debug-brk`
   - `--inspect` to start the debugger UI
   - `--debug-brk` to break on the first line so you have time to open the debugger
