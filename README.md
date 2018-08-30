@@ -1,5 +1,7 @@
 # slush-js
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/maxkfranz/slush-js.svg)](https://greenkeeper.io/)
+
 A Slush scaffolder that generates JS projects for you (clientside, serverside, both clientside and serverside, or standalone lib).
 
 The generated project has live reloading on code changes (for both clientside and serverside, as applicable).  The live reloading has been tweaked to be very fast to maximise productivity.
