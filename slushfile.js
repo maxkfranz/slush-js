@@ -33,13 +33,6 @@ let paths = {
     '.stylelintrc.json',
     'postcss.config.js'
   ],
-  lib: [
-    'src/index.js',
-    'demo.html'
-  ],
-  libAndCss: [
-    'src/styles/index.css'
-  ],
   clientAndCss: [
     'src/styles/**/*'
   ],
@@ -65,33 +58,12 @@ let paths = {
 let includes = ( arr, val ) => arr == null ? false : arr.includes( val );
 let whenUsingGithub = answers => answers.useGithub === true;
 let whenServer = answers => includes(answers.type, 'server');
-let whenLib = answers => answers.lib === true;
-let whenNotLib = answers => answers.lib === false;
 let whenClient = answers => includes(answers.type, 'client');
 
 gulp.task('default', function( next ){
   console.log('\nAnswer the following questions to scaffold your JS project.\n');
 
   inquirer.prompt([
-    {
-      type: 'list',
-      name: 'lib',
-      message: 'Is the project a library or an app',
-      choices: [
-        { name: 'App', value: false },
-        { name: 'Library', value: true }
-      ],
-      default: true
-    },
-
-    {
-      type: 'confirm',
-      name: 'css',
-      message: 'Does the lib need to build CSS',
-      default: false,
-      when: whenLib
-    },
-
     {
       type: 'checkbox',
       name: 'type',
