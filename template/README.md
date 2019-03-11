@@ -33,7 +33,7 @@ The following environment variables can be used to configure the server:
 - `npm run watch` : watch mode (debug mode enabled, autorebuild, autoreload)
 - `npm test` : run tests
 - `npm run lint` : lint the project
-
+- `npm run ci` : run linting & tests (like Travis CI)
 
 {{#clientOrServer}}
 ## Running via Docker
@@ -67,7 +67,7 @@ Notes:
 
 ## Testing
 
-All files `/test` will be run by [Mocha](https://mochajs.org/).  You can `npm test` to run all tests, or you can run `mocha -g specific-test-name` (prerequisite: `npm install -g mocha`) to run specific tests.
+All files `/test` will be run by [Mocha](https://mochajs.org/).  You can `npm test` to run all tests, or you can run `npm test -- -g specific-test-name` to run specific tests.
 
 [Chai](http://chaijs.com/) is included to make the tests easier to read and write.
 
