@@ -55,7 +55,8 @@ let paths = {
   ],
   clientOrServer: [
     'Dockerfile',
-    '.dockerignore'
+    '.dockerignore',
+    '.env'
   ],
   clientOnly: ['index.html'],
   mit: ['LICENSE']

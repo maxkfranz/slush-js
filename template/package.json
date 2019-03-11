@@ -42,7 +42,7 @@
     {{/buildJs}}
 
     {{#server}}
-    "watch:sync-server": "nodemon src/server/index.js",
+    "watch:sync-server": "nodemon -r dotenv/config src/server/index.js",
     {{/server}}
 
     {{#buildCss}}
@@ -81,6 +81,7 @@
     "morgan": "^1.9.1",
     "winston": "^3.2.1",
     "lodash": "^4.17.11",
+    "dotenv": "^6.2.0",
     {{/server}}
 
     {{#client}}
@@ -94,7 +95,6 @@
     {{#react}}
     "@babel/preset-react": "^7.0.0",
     {{/react}}
-
 
     {{#buildCss}}
     "normalize.css": "^8.0.1",
@@ -132,6 +132,7 @@
     "@babel/preset-env": "^7.3.4",
     "@babel/core": "^7.3.4",
     "babel-loader": "^8.0.5",
+    "dotenv-webpack": "^1.7.0",
     {{/buildJs}}
 
     "cross-env": "^5.2.0",

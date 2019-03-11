@@ -6,10 +6,10 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const debug = require('debug')('{{name}}:server');
 const http = require('http');
-const config = require('./config');
 const logger = require('./logger');
 const stream = require('stream');
 const fs = require('fs');
+const { NODE_ENV, PORT } = require('./env');
 
 const app = express();
 const server = http.createServer(app);
@@ -54,7 +54,7 @@ app.use(function(req, res, next) {
 
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development') {
+if (NODE_ENV === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error.html');
@@ -69,39 +69,20 @@ app.use(function(err, req, res, next) {
   res.render('error.html');
 });
 
+app.set('port', PORT);
 
-let port = normalizePort(config.PORT);
-
-app.set('port', port);
-
-server.listen(port);
+server.listen(PORT);
 server.on('error', onError);
 server.on('listening', onListening);
-
-function normalizePort(val) {
-  let port = parseInt(val, 10);
-
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
-
-  if (port >= 0) {
-    // port number
-    return port;
-  }
-
-  return false;
-}
 
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
 
-  let bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  let bind = typeof PORT === 'string'
+    ? 'Pipe ' + PORT
+    : 'Port ' + PORT;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {

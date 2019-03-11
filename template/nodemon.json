@@ -2,6 +2,7 @@
   "watch": [
     "./src/model",
     "./src/server",
-    "./src/util"
+    "./src/util",
+    ".env"
   ]
 }
