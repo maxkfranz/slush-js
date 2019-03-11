@@ -2,7 +2,4 @@ node_modules
 .DS_Store
 npm-debug.log
 /build
-/rethinkdb_data
-warn.log
-error.log
-debug.log
+out.log
