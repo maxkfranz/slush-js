@@ -19,9 +19,7 @@ The stack uses npm scripts to drive the build targets using the CLI of several p
   - JS
     - [Webpack](https://webpack.js.org/) for bundling with [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) `require()` support and ES `import` support
     - [Babel](https://babeljs.io/) for transpiling and polyfilling ES6+
-    - [Browsersync](https://www.browsersync.io/)
-      - Support for live reloading the UI when the code is changed
-      - Support for testing on multiple browsers or multiple devices simultaneously (config UI at [http://localhost:3002](http://localhost:3002) when running `npm run watch`)
+    - [Livereload](https://www.npmjs.com/package/livereload) for live reloading the UI when the code is changed on a `watch`
     - [UglifyJS](http://lisperator.net/uglifyjs/) to compress built JS
     - [React](https://facebook.github.io/react/) (optional)
   - CSS
@@ -36,12 +34,12 @@ The stack uses npm scripts to drive the build targets using the CLI of several p
   - [Express](http://expressjs.com/) for a fast, modular, minimalistic server that can be used to serve pages and/or services
   - [Forever](https://www.npmjs.com/package/forever) to make the server automatically restart on crashes
   - [Nodemon](https://www.npmjs.com/package/nodemon) to bring live reloading functionality for serverside code when developing
+  - [ESM](https://www.npmjs.com/package/esm) for ESM support in Node
 
 
 ## Notes
 
-- Don't use ES2015 `import` if you want to share code between the server and the client.  You can't use `import` in Node.js.  Once there is an LTS release of Node that supports `import`, it will make sense to use it.
-- Debug Mocha tests or server code with `node --inspect --debug-brk` or `mocha --inspect --debug-brk`
+- Debug Mocha tests or server code with `npm run <target> -- --inspect --debug-brk`
   - `--inspect` to start the debugger UI
   - `--debug-brk` to break on the first line so you have time to open the debugger
 - Do not use Webpack to `import` or `require()` your CSS from inside your JS.  Do not use Webpack to bundle CSS into your JS bundles.  If you do that, you can no longer share code between the client and the server.
