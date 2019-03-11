@@ -7,8 +7,6 @@
  * strings).
  */
 
-module.exports = {
-  NODE_ENV: process.env.NODE_ENV,
-  PORT: parseInt(process.env.PORT, 10),
-  LOG_LEVEL: process.env.LOG_LEVEL
-};
+export const NODE_ENV = process.env.NODE_ENV;
+export const PORT = parseInt(process.env.PORT, 10);
+export const LOG_LEVEL = process.env.LOG_LEVEL;

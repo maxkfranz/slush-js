@@ -20,8 +20,8 @@
     {{/buildJs}}
 
     {{#server}}
-    "start": "forever ./src/server",
-    "stop": "forever stop ./src/server",
+    "start": "forever -r dotenv/config -r esm ./src/server",
+    "stop": "forever -r dotenv/config -r esm stop ./src/server",
     {{/server}}
 
     {{#clientOnly}}
@@ -42,7 +42,7 @@
     {{/buildJs}}
 
     {{#server}}
-    "watch:sync-server": "nodemon -r dotenv/config src/server/index.js",
+    "watch:sync-server": "nodemon -r dotenv/config -r esm src/server/index.js",
     {{/server}}
 
     {{#buildCss}}
@@ -64,9 +64,11 @@
 
     "lint": "run-s lint:*",
     "watch": "run-p watch:*",
-    "test": "mocha"
+    "test": "mocha -r dotenv/config -r esm"
   },
   "dependencies": {
+    "esm": "^3.2.14",
+
     {{#react}}
     "react": "^16.8.4",
     "react-dom": "^16.8.4",

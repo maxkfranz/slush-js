@@ -1,16 +1,17 @@
-const express = require('express');
-const path = require('path');
-const favicon = require('serve-favicon');
-const morgan = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const debug = require('debug')('{{name}}:server');
-const http = require('http');
-const logger = require('./logger');
-const stream = require('stream');
-const fs = require('fs');
-const { NODE_ENV, PORT } = require('./env');
+import express from 'express';
+import path from 'path';
+import favicon from 'serve-favicon';
+import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import debug from 'debug';
+import http from 'http';
+import logger from './logger';
+import stream from 'stream';
+import fs from 'fs';
+import { NODE_ENV, PORT } from './env';
 
+const debugLog = debug('{{name}}:server');
 const app = express();
 const server = http.createServer(app);
 
@@ -104,7 +105,7 @@ function onListening() {
   let bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  debugLog('Listening on ' + bind);
 }
 
 module.exports = app;

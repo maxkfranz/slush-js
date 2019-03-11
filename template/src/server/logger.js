@@ -1,5 +1,5 @@
-let winston = require('winston');
-let { LOG_LEVEL, NODE_ENV } = require('./env');
+import winston from 'winston';
+import { LOG_LEVEL, NODE_ENV } from './env';
 
 const logger = winston.createLogger({
   level: LOG_LEVEL,
@@ -20,4 +20,4 @@ if (NODE_ENV !== 'production') {
   }));
 }
 
-module.exports = logger;
+export default logger;
