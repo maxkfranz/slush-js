@@ -1,7 +1,7 @@
-let domReady = require('fready');
-let sync = require('./sync');
+import domReady from 'fready';
+import sync from './sync';
 
-let debug = window.dbg = {
+export const debug = {
   enabled: function( on ){
     if( arguments.length === 0 ){
       if( this._enabled != null ){
@@ -19,4 +19,4 @@ let debug = window.dbg = {
   }
 };
 
-module.exports = debug;
+export default debug;

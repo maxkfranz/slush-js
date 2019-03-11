@@ -1,4 +1,8 @@
-let debug = require('./debug');
+import debug from './debug';
+{{#react}}
+import React from 'react';
+import ReactDOM from 'react-dom';
+{{/react}}
 
 if( debug.enabled() ){
   debug.init();
@@ -7,10 +11,6 @@ if( debug.enabled() ){
 // TODO client
 {{#react}}
 // react example
-
-let React = require('react');
-let ReactDOM = require('react-dom');
-
 let div = document.createElement('div');
 document.body.appendChild( div );
 
