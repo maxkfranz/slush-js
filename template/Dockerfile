@@ -2,8 +2,7 @@
 # https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
 # https://github.com/nodejs/docker-node
 
-# v6 is the latest LTS
-FROM node:6
+FROM node:8
 
 # Create app directory
 RUN mkdir -p /usr/src/app
