@@ -22,8 +22,7 @@ let paths = {
   ],
   buildJs: [
     'build/bundle.js',
-    'webpack.config.js',
-    'browser-sync.config.js'
+    'webpack.config.js'
   ],
   buildDeps: [
     'build/deps.js',

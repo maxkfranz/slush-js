@@ -46,7 +46,7 @@
     {{#buildJs}}
     "bundle:js": "webpack",
     "watch:js": "webpack --watch",
-    "watch:sync-bundle": "browser-sync start --config browser-sync.config.js",
+    "watch:sync-bundle": "livereload \"build, src/views\"",
     {{/buildJs}}
 
     {{#server}}
@@ -133,7 +133,7 @@
     {{/client}}
 
     "cross-env": "^5.0.0",
-    "browser-sync": "^2.18.13",
+    "livereload": "^0.7.0",
     "npm-run-all": "^4.1.1",
     "echo-cli": "^1.0.8",
     "rimraf": "^2.6.2",
