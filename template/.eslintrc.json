@@ -8,9 +8,9 @@
   },
   "extends": "eslint:recommended",
   "parserOptions": {
-    "ecmaFeatures": {
+    {{#react}}"ecmaFeatures": {
       "jsx": true
-    }
+    }{{/react}}
   },
   "plugins": [],
   "rules": {

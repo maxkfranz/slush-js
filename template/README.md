@@ -4,7 +4,7 @@
 {{#server}}
 ## Required software
 
-- [Node.js](https://nodejs.org/en/) >=6.3.0
+- [Node.js](https://nodejs.org/en/) >=8.15.0
 
 
 
@@ -14,6 +14,7 @@ The following environment variables can be used to configure the server:
 
 - `NODE_ENV` : the environment mode, either `production` or `development` (default)
 - `PORT` : the port on which the server runs (default 3000)
+- `LOG_LEVEL` : the log level for `out.log`
 {{/server}}
 
 

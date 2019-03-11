@@ -1,29 +1,25 @@
+const path = require('path');
 const webpack = require('webpack');
 const { env } = require('process');
+const nodeEnv = env.NODE.ENV || 'development';
 const isProd = env.NODE_ENV === 'production';
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const isNonNil = x => x != null;
-{{#client}}const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const isProfile = env.PROFILE == 'true';{{/client}}
-const minify = env.MINIFY == 'true'{{#clientOrServer}} || isProd{{/clientOrServer}};
-const pkg = require('./package.json');
-{{#lib}}const camelcase = require('camelcase');{{/lib}}
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const isProfile = env.PROFILE == 'true';
+const minify = env.MINIFY == 'true' || isProd;
 
 let conf = {
+  mode: nodeEnv,
+
   devtool: isProd ? false : 'inline-source-map',
 
-  entry: {{#lib}}'./src/index.js'{{/lib}}{{#client}}'./src/client/index.js'{{/client}},
+  entry: './src/client/index.js',
 
   output: {
-    filename: './build/bundle.js'{{#lib}},
-    library: camelcase( pkg.name ),
-    libraryTarget: 'umd'
-    {{/lib}}
+    path: path.resolve(__dirname, 'build'),
+    filename: '[name].js'
   },
-
-  {{#lib}}
-  externals: isProd ? Object.keys( pkg.dependencies || {} ) : [],
-  {{/lib}}
 
   module: {
     rules: [
@@ -31,22 +27,32 @@ let conf = {
     ]
   },
 
-  plugins: [
-    new webpack.EnvironmentPlugin(['NODE_ENV']),
-
-    {{#client}}new webpack.optimize.CommonsChunkPlugin({
-      name: 'deps',
-      filename: './build/deps.js',
-      minChunks( module ){
-        let context = module.context || '';
-
-        return context.indexOf('node_modules') >= 0;
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        deps: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'deps',
+          chunks: 'all',
+        },
+        default: {
+          name: 'main',
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true
+        }
       }
+    }
+  },
+
+  plugins: [
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: nodeEnv
     }),
 
     isProfile ? new BundleAnalyzerPlugin() : null,
 
-    {{/client}}
     minify ? new UglifyJSPlugin() : null
   ].filter( isNonNil )
 };

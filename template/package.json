@@ -14,15 +14,7 @@
   "homepage": "https://github.com/{{{githubProj}}}",
   {{/useGithub}}
 
-  {{#lib}}
-  "main": "./build/bundle.js",
-  {{/lib}}
-
   "scripts": {
-    {{#lib}}
-    "prepublish": "run-s build",
-    {{/lib}}
-
     {{#buildJs}}
     "postinstall": "run-s build",
     {{/buildJs}}
@@ -55,8 +47,8 @@
 
     {{#buildCss}}
     "lint:css": "stylelint src/**/*.css",
-    "bundle:css": "postcss src/styles/index.css -o build/bundle.css",
-    "watch:css": "postcss --watch src/styles/index.css -o build/bundle.css",
+    "bundle:css": "postcss src/styles/index.css -o build/main.css",
+    "watch:css": "postcss --watch src/styles/index.css -o build/main.css",
     {{#client}}
     "bundle:css-deps": "postcss src/styles/deps.css -o build/deps.css",
     "watch:css-deps": "postcss --watch src/styles/deps.css -o build/deps.css",
@@ -76,19 +68,19 @@
   },
   "dependencies": {
     {{#react}}
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "react-hyperscript": "^3.0.0",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "react-hyperscript": "^3.2.0",
     {{/react}}
 
     {{#server}}
-    "express": "^4.13.4",
-    "serve-favicon": "^2.3.0",
-    "cookie-parser": "^1.4.3",
-    "body-parser": "^1.15.1",
-    "morgan": "^1.7.0",
-    "winston": "^2.3.1",
-    "lodash": "^4.17.4",
+    "express": "^4.16.4",
+    "serve-favicon": "^2.5.0",
+    "cookie-parser": "^1.4.4",
+    "body-parser": "^1.18.3",
+    "morgan": "^1.9.1",
+    "winston": "^3.2.1",
+    "lodash": "^4.17.11",
     {{/server}}
 
     {{#client}}
@@ -100,57 +92,56 @@
   "devDependencies": {
 
     {{#react}}
-    "babel-preset-react": "^6.16.0",
+    "@babel/preset-react": "^7.0.0",
     {{/react}}
 
 
     {{#buildCss}}
-    "normalize.css": "^5.0.0",
+    "normalize.css": "^8.0.1",
     {{/buildCss}}
 
     {{#clientOnly}}
-    "http-server": "0.9.0",
+    "http-server": "0.11.1",
     {{/clientOnly}}
 
     {{#buildCss}}
-    "cssnano": "^3.10.0",
-    "postcss": "^6.0.11",
-    "postcss-cli": "^4.1.1",
-    "postcss-cssnext": "^3.0.2",
-    "postcss-import": "^10.0.0",
-    "postcss-url": "^7.1.2",
-    "stylelint": "^8.1.1",
-    "stylelint-config-standard": "^17.0.0",
+    "cssnano": "^4.1.10",
+    "postcss": "^7.0.14",
+    "postcss-cli": "^6.1.2",
+    "postcss-cssnext": "^3.1.0",
+    "postcss-import": "^12.0.1",
+    "postcss-url": "^8.0.0",
+    "stylelint": "^9.10.1",
+    "stylelint-config-standard": "^18.2.0",
     {{/buildCss}}
 
     {{#server}}
-    "forever": "^0.15.2",
-    "nodemon": "^1.12.1",
+    "forever": "^0.15.3",
+    "nodemon": "^1.18.10",
     {{/server}}
 
     {{#client}}
-    "webpack-bundle-analyzer": "^2.9.0",
+    "webpack-bundle-analyzer": "^3.1.0",
+    "core-js": "^2.6.5",
     {{/client}}
 
-    "cross-env": "^5.0.0",
+    {{#buildJs}}
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3",
+    "uglifyjs-webpack-plugin": "^2.1.2",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/core": "^7.3.4",
+    "babel-loader": "^8.0.5",
+    {{/buildJs}}
+
+    "cross-env": "^5.2.0",
     "livereload": "^0.7.0",
-    "npm-run-all": "^4.1.1",
+    "npm-run-all": "^4.1.5",
     "echo-cli": "^1.0.8",
-    "rimraf": "^2.6.2",
-    "webpack": "^3.5.6",
-    "uglifyjs-webpack-plugin": "^1.1.2",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-polyfill": "^6.9.1",
-    "babel-preset-env": "^1.6.0",
-    "mocha": "^3.5.3",
-    "chai": "^4.1.2",
-    "eslint": "^4.6.1",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-node": "^5.1.1",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1"
+    "rimraf": "^2.6.3",
+    "mocha": "^6.0.2",
+    "chai": "^4.2.0",
+    "eslint": "^5.15.1"
   },
   "engines": {
     "node": ">=8"

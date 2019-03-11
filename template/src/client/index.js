@@ -1,5 +1,3 @@
-require('babel-polyfill');
-
 let debug = require('./debug');
 
 if( debug.enabled() ){

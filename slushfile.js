@@ -201,11 +201,11 @@ gulp.task('default', function( next ){
         if( answers.server ){
           try {
             if( answers.buildJs ){
-              fs.symlinkSync( '../build/bundle.js', './public/bundle.js' );
+              fs.symlinkSync( '../build/main.js', './public/main.js' );
               fs.symlinkSync( '../build/deps.js', './public/deps.js' );
             }
             if( answers.buildCss ){
-              fs.symlinkSync( '../build/bundle.css', './public/bundle.css' );
+              fs.symlinkSync( '../build/main.css', './public/main.css' );
               fs.symlinkSync( '../build/deps.css', './public/deps.css' );
             }
           } catch( err ){} // try/catch for convenience in testing onverwrites
