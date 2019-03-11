@@ -1,6 +1,4 @@
-var chai = require('chai');
-var expect = chai.expect;
-var assert = chai.assert;
+import { expect, assert } from 'chai';
 
 describe('Example', function(){
   it('does something', function(){
