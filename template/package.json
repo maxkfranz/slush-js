@@ -15,10 +15,6 @@
   {{/useGithub}}
 
   "scripts": {
-    {{#buildJs}}
-    "postinstall": "run-s build",
-    {{/buildJs}}
-
     {{#server}}
     "start": "forever -r dotenv/config -r esm ./src/server",
     "stop": "forever -r dotenv/config -r esm stop ./src/server",
