@@ -71,8 +71,7 @@ gulp.task('default', function( next ){
       choices: [
         { name: 'Clientside', value: 'client', checked: true },
         { name: 'Serverside', value: 'server', checked: true }
-      ],
-      when: whenNotLib
+      ]
     },
 
     {
