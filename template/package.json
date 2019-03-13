@@ -146,5 +146,5 @@
   "engines": {
     "node": ">=8"
   },
-  "browserslist": "last 3 versions, >1%"
+  "browserslist": "> 0.5%, last 2 versions, Firefox ESR, not dead"
 }
