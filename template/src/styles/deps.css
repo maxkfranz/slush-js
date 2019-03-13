@@ -4,13 +4,22 @@
 
 @import "./vars.css";
 
+
 /* fonts */
+
+/* main sans serif font */
 /*@import "./vendor/fonts/open-sans.css";*/
-@import "./vendor/fonts/open-sans-latin-greek.css";
+@import "./vendor/fonts/open-sans-latin-greek.css"; /* latin/greek subset to save space */
+
+/* fixed-width font */
 /*@import "./vendor/fonts/inconsolata.css";*/
-@import "./vendor/fonts/inconsolata-ascii.css";
+@import "./vendor/fonts/inconsolata-ascii.css"; /* ascii-only subset to save space */
+
+/* font awesome icons */
 @import "./vendor/fonts/font-awesome.css";
-/*@import "./vendor/fonts/font-awesome-form.css";*/
-@import "./vendor/fonts/font-awesome-custom.css";
+/*@import "./vendor/fonts/font-awesome-form.css";*/ /* use fa icons for checkbox etc */
+@import "./vendor/fonts/font-awesome-custom.css"; /* customisations to fa */
+
+/* google material icons */
 @import "./vendor/fonts/material-icons.css";
-@import "./vendor/fonts/material-form.css";
+@import "./vendor/fonts/material-form.css"; /* use material icons for checkbox etc */
