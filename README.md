@@ -1,6 +1,6 @@
 # slush-js
 
-A Slush scaffolder that generates JS projects for you (clientside, serverside, both clientside and serverside, or standalone lib).
+A Slush scaffolder that generates JS projects for you (clientside, serverside, both clientside and serverside).
 
 The generated project has live reloading on code changes (for both clientside and serverside, as applicable).  The live reloading has been tweaked to be very fast to maximise productivity.
 
