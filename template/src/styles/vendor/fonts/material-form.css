@@ -8,7 +8,7 @@ input[type="checkbox"] {
 input[type="radio"] + label:before,
 input[type="checkbox"] + label::before {
   font: normal normal normal 24px/1 'Material Icons';
-  font-size: inherit;
+  font-size: 125%;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

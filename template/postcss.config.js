@@ -27,7 +27,13 @@ let conf = {
       }
     ]),
     require('postcss-preset-env')({
-      stage: 0
+      stage: 2,
+      features: {
+        'custom-properties': {
+          preserve: false
+        },
+        'nesting-rules': true
+      }
     }),
     isProd ? require('cssnano')({
       safe: true

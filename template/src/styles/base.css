@@ -47,7 +47,7 @@ select,
   transition-timing-function: ease-out;
 
   &::placeholder {
-    color: color(var(--widgetBorderColor) blackness(+30%));
+    color: var(--widgetBorderColor);
   }
 
   &:active {
@@ -238,7 +238,7 @@ button {
     border-color: var(--buttonActiveColor);
 
     &.plain-button {
-      border-color: color(var(--buttonActiveColor) lightness(+33%));
+      border-color: var(--widgetDisabledBorderColor);
     }
 
     &.active-button {
@@ -318,10 +318,12 @@ button {
 
 .icon {
   display: inline-block;
-  line-height: 1em;
-  vertical-align: -0.125em;
-  width: 1em;
-  height: 1em;
+  line-height: inherit;
+  vertical-align: middle;
+  margin-top: -0.15em;
+  width: 1.25em;
+  height: 1.25em;
+  background-position: 50% 50%;
   background-size: contain;
 }
 
@@ -389,7 +391,7 @@ a {
   cursor: pointer;
 
   &.plain-link {
-    box-shadow: 0 -1px color(var(--activeColor) a(50%)) inset;
+    box-shadow: 0 -1px var(--activeColor) inset;
     transition: box-shadow var(--widgetTransitionDuration) ease-out;
 
     &:active {

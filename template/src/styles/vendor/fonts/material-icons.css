@@ -16,7 +16,7 @@
 
 .material-icons {
   font: normal normal normal 24px/1 'Material Icons';
-  font-size: inherit;
+  font-size: 125%;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
