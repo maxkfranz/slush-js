@@ -122,6 +122,7 @@
     {{#client}}
     "webpack-bundle-analyzer": "^3.1.0",
     "core-js": "^2.6.5",
+    "whatwg-fetch": "^3.0.0",
     {{/client}}
 
     {{#buildJs}}
